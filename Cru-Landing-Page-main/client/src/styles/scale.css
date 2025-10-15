@@ -1,0 +1,63 @@
+/* 
+ * GLOBAL SCALE FIX FOR LAPTOP DISPLAYS
+ * 
+ * Problem: Layout was designed at ~2200px+ scale, appearing zoomed-in on normal laptops
+ * Solution: Scale down by 75% (0.75) to match 75% browser zoom appearance at 100% zoom
+ * 
+ * To revert: Remove .scale-wrapper class from App.tsx or set ENABLE_SCALE_FIX to false
+ */
+
+.scale-wrapper {
+  /* Apply to large screens only (laptops+) */
+  transform-origin: top left !important;
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* AGGRESSIVE SCALING FOR LAPTOP SCREENS */
+@media (min-width: 1024px) {
+  .scale-wrapper {
+    /* Scale down to 75% - FORCE IT */
+    transform: scale(0.75) !important;
+    transform-origin: top left !important;
+    
+    /* Adjust width to prevent horizontal scroll */
+    width: 133.333% !important; /* 100% / 0.75 = 133.333% */
+    
+    /* Don't use margin for centering, it causes issues */
+    position: relative;
+    left: 0;
+  }
+  
+  /* Alternative: Use zoom property for better compatibility */
+  @supports (zoom: 0.75) {
+    .scale-wrapper {
+      zoom: 0.75;
+      transform: none !important;
+      width: 100% !important;
+    }
+  }
+}
+
+/* Fix for portals and fixed position elements (modals, tooltips, etc.) */
+@media (min-width: 1024px) {
+  [data-radix-portal],
+  .portal-content,
+  [role="dialog"],
+  [role="tooltip"] {
+    /* Counter-scale portals if they're inside the wrapper */
+    transform: scale(1.333) !important; /* 1 / 0.75 = 1.333 */
+    transform-origin: top left !important;
+  }
+  
+  @supports (zoom: 0.75) {
+    [data-radix-portal],
+    .portal-content,
+    [role="dialog"],
+    [role="tooltip"] {
+      zoom: 1.333;
+      transform: none !important;
+    }
+  }
+}
