@@ -1,0 +1,3 @@
+[submodule "Cru-BASIC-Nostr-Client"]
+	path = Cru-BASIC-Nostr-Client
+	url = git@github.com:p0x15/CRU.git
